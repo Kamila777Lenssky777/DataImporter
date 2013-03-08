@@ -10,8 +10,10 @@
     <context:property-placeholder location="classpath:spring.properties"/>
 
     <!-- DAO -->
+    <context:component-scan base-package="ua.org.romashchenko.study6.importerdata.importer" />
+    
     <context:component-scan base-package="ua.org.romashchenko.study6.importerdata.dao" />
-
+    
     <bean class="org.springframework.jdbc.core.simple.SimpleJdbcTemplate">
         <constructor-arg ref="dataSource"/>
     </bean>

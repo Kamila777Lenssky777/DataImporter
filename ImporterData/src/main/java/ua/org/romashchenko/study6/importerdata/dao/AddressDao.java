@@ -7,5 +7,7 @@ public interface AddressDao {
 
     public boolean insert(Address address);
 
+    public boolean multipleInsert(final List<Address> addresses);
+
     public List<Address> findAllAddresses();
 }
