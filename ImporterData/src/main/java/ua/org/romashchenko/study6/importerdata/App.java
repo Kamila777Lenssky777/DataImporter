@@ -13,7 +13,12 @@ import java.util.Random;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 import ua.org.romashchenko.study6.importerdata.dao.AddressDao;
+import ua.org.romashchenko.study6.importerdata.dao.CityDaoImpl;
 import ua.org.romashchenko.study6.importerdata.model.Address;
+import ua.org.romashchenko.study6.importerdata.model.City;
+import ua.org.romashchenko.study6.importerdata.model.Country;
+import ua.org.romashchenko.study6.importerdata.model.Postcode;
+import ua.org.romashchenko.study6.importerdata.model.Region;
 
 /**
  * Hello world!
@@ -31,13 +36,21 @@ public class App {
                 new ClassPathXmlApplicationContext("spring-config.xml");
 
         DataImporter importer = (DataImporter) context.getBean("dataImporter");
-        importer.showAddresses();
+        importer.showCities();
         importer.importData(reader);
-        importer.showAddresses();
-
-        //  AddressDao dao = (AddressDao) context.getBean("addressDaoImpl");
+        importer.showCities();
 
 
+        
 
+
+
+    }
+
+    public static void showList(List list) {
+        System.out.println("List of something");
+        for (Object element : list) {
+            System.out.println(element);
+        }
     }
 }

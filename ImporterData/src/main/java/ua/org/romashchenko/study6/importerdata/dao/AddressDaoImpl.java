@@ -64,6 +64,7 @@ public class AddressDaoImpl implements AddressDao {
         String sql = "insert into `addresses` (`country`, `region`, `city`, `postcode`) values (?,?,?,?)";
        
 
+        //PreparedStatement ps = jdbcTemplate.
 //       jdbcTemplate.batchUpdate(sql, new BatchPreparedStatementSetter() {
 // 
 //	@Override

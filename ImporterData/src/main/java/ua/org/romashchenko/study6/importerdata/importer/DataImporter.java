@@ -15,7 +15,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.stereotype.Service;
 import ua.org.romashchenko.study6.importerdata.dao.AddressDao;
+import ua.org.romashchenko.study6.importerdata.dao.CityDaoImpl;
 import ua.org.romashchenko.study6.importerdata.model.Address;
+import ua.org.romashchenko.study6.importerdata.model.City;
+import ua.org.romashchenko.study6.importerdata.model.Country;
+import ua.org.romashchenko.study6.importerdata.model.Postcode;
+import ua.org.romashchenko.study6.importerdata.model.Region;
 
 /**
  *
@@ -25,51 +30,58 @@ import ua.org.romashchenko.study6.importerdata.model.Address;
 public class DataImporter {
 
     @Autowired
-    private AddressDao dao;
+    private CityDaoImpl dao;
 
     public void importData(BufferedReader reader) throws IOException {
         String line;
-        List<Address> addresses = new ArrayList<Address>(28000);
+        List<City> cities = new ArrayList<City>(28000);
         List<String> words = new LinkedList<String>();
         while ((line = reader.readLine()) != null) {
             words.addAll(Arrays.asList(line.split("\\t")));
             ListIterator<String> iterator = words.listIterator();
             while (iterator.hasNext() && words.size() >= 12) {
-                String country = iterator.next();   //1 
+                iterator.next();   //1 
                 iterator.remove();
-                iterator.next();                    //2
+                String postcode = iterator.next();                    //2
                 iterator.remove();
-                String city = iterator.next();      //3
+                String cityName = iterator.next();      //3
                 iterator.remove();
-                String region = iterator.next();    //4
+                String countryname = iterator.next();    //4
                 iterator.remove();
-                String postCode = iterator.next();   //5
+                String countryCode = iterator.next();   //5
                 iterator.remove();
-                iterator.next();    //6
+                String regionName = iterator.next();    //6
                 iterator.remove();
-                for (int i = 0; i < 6; i++) {
+                String regionCode = iterator.next();    //6
+                iterator.remove();
+                for (int i = 0; i < 5; i++) {
                     iterator.next();
                     iterator.remove();
                 }
-                addresses.add(new Address(country, region, city, postCode));
+                Country country = new Country(countryname, countryCode);
+                Region region = new Region(regionName, regionCode, country);
+                Postcode code = new Postcode(postcode);
+                City city = new City(cityName, region, code);
+                cities.add(city);
+                dao.insert(city);
             }
         }
-        dao.multipleInsert(addresses);
+        //dao.multipleInsert(addresses);
     }
 
-    public void showAddresses() {
-        System.out.println("Addresses:");
-        for (Address address : dao.findAllAddresses()) {
-            System.out.println(address);
+    public void showCities() {
+        System.out.println("Cities:");
+        for (City city : dao.findAll()) {
+            System.out.println(city);
         }
         System.out.println("-----------------------");
     }
 
-    public void setDao(AddressDao dao) {
-        this.dao = dao;
+    public CityDaoImpl getDao() {
+        return dao;
     }
 
-    public AddressDao getDao() {
-        return dao;
+    public void setDao(CityDaoImpl dao) {
+        this.dao = dao;
     }
 }
